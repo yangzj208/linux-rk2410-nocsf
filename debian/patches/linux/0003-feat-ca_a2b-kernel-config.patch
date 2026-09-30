@@ -1,0 +1,48 @@
+From: Cursor Agent <cursoragent@cursor.com>
+Date: Wed, 30 Sep 2026 15:40:00 +0000
+Subject: [PATCH] feat: pin ca-a2b MCP251xFD and PCM6240 kernel config
+
+Merged last, after radxa.config and radxa_custom.config. Audio and CAN
+values match the official 0001+0002 result; PCM6240 is additional.
+---
+ src/arch/arm64/configs/ca_a2b.config | 32 ++++++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+
+diff --git a/src/arch/arm64/configs/ca_a2b.config b/src/arch/arm64/configs/ca_a2b.config
+new file mode 100644
+index 000000000000..111111111111
+--- /dev/null
++++ b/src/arch/arm64/configs/ca_a2b.config
+@@ -0,0 +1,32 @@
++# ca-a2b fragment. Merge last, after radxa.config and radxa_custom.config.
++# Sound and CAN lines match the official 0001+0002 result on 6.1.84-18.
++# PCM6240 is additional (driver backport in the following patch).
++# Do not start a comment with "# CONFIG_" or merge_config.sh will treat it
++# as an assignment.
++
++# 0002 forces the Rockchip ASoC core built-in.
++CONFIG_SOUND=y
++CONFIG_SND=y
++CONFIG_SND_SOC=y
++CONFIG_SND_SOC_ROCKCHIP=y
++CONFIG_SND_SOC_ROCKCHIP_I2S=y
++CONFIG_SND_SOC_ROCKCHIP_I2S_TDM=y
++# After 0001 sets SND_SOC=m, olddefconfig demotes SAI from y to m.
++# 0002 sets SND_SOC=y but does not restore SAI, so the merge result is m.
++CONFIG_SND_SOC_ROCKCHIP_SAI=m
++
++# 0001 leaves simple-card modular.
++CONFIG_SND_SIMPLE_CARD_UTILS=m
++CONFIG_SND_SIMPLE_CARD=m
++
++# TI PCM6240 family (snd-soc-pcm6240.ko).
++CONFIG_SND_SOC_PCM6240=m
++
++# SPI CAN. 0002 disables Rockchip CAN only; MCP stays modular.
++CONFIG_CAN=y
++CONFIG_CAN_DEV=y
++CONFIG_SPI=y
++CONFIG_CAN_MCP251X=m
++CONFIG_CAN_MCP251XFD=m
++CONFIG_CAN_ROCKCHIP=n
++CONFIG_CANFD_ROCKCHIP=n

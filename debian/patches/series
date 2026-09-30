@@ -1,2 +1,4 @@
 linux/0001-feat-Radxa-common-kernel-config.patch
 linux/0002-feat-Radxa-custom-kernel-config.patch
+linux/0003-feat-ca_a2b-kernel-config.patch
+linux/0004-feat-backport-pcm6240-v6.10-soft-fail.patch
